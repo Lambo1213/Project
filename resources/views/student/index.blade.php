@@ -10,9 +10,10 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <ul id="saveform_errlist"></ul>
         <div class="form-group mb-3">
           <label for="">Nom etudiant</label>
-          <input type="text" name="nom" class="form-control">
+          <input type="text" name="name" class="form-control">
         </div>
         <div class="form-group mb-3">
           <label for="">Email</label>
@@ -63,19 +64,32 @@
         $(document).on(click, '.ajout_etudiant' , function (e) {
           e.preventDefault();
           var data = {
-            'nom':$('.nom').val(),  
+            'name':$('.name').val(),  
             'email':$('.email').val(),
             'phone':$('.phone').val(),
             'corse':$('.corse').val(),
           }
           //  console.log('data');
+          $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
           $.ajax({
             type: "POST",
             url: "/students",
             data: "data",
             dataType: "json",
             success: function (response) {
-              console.log(response);
+              // console.log(response);
+              if (response.status == 400) {
+
+                     $('#saveform_errlist').html("");
+                     $('#saveform_errlist').addClass("Alert alert-danger");
+                     $.each(response.errors, function (key, err_values) { 
+                     $('#saveform_errlist').append('<li>'+err_values+'</li>');
+                  });
+              }
             }
           });
         });
