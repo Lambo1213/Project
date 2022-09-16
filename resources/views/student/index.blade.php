@@ -12,30 +12,31 @@
       <div class="modal-body">
         <div class="form-group mb-3">
           <label for="">Nom etudiant</label>
-          <input type="text" class="name form-control">
+          <input type="text" name="nom" class="form-control">
         </div>
         <div class="form-group mb-3">
           <label for="">Email</label>
-          <input type="text" class="name form-control">
+          <input type="text" name="email" class="form-control">
         </div>
         <div class="form-group mb-3">
           <label for="">Telephone</label>
-          <input type="text" class="name form-control">
+          <input type="text" name="phone" class="form-control">
         </div>
         <div class="form-group mb-3">
           <label for="">Cour</label>
-          <input type="text" class="name form-control">
+          <input type="text" name="corse" class="form-control">
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn btn-primary ajout_etudiant">Enregistrer</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-success ajout_etudiant">Enregistrer</button>
       </div>
     </div>
   </div>
 </div>
 
 @section('content')
+             <center><h1>Page etudiant</h1></center>
   <div class="container py-5">
     <div class="row">
         <div class="col-md-12">
@@ -61,7 +62,22 @@
     $(document).ready(function () {
         $(document).on(click, '.ajout_etudiant' , function (e) {
           e.preventDefault();
-          // console.log('hello');
+          var data = {
+            'nom':$('.nom').val(),  
+            'email':$('.email').val(),
+            'phone':$('.phone').val(),
+            'corse':$('.corse').val(),
+          }
+          //  console.log('data');
+          $.ajax({
+            type: "POST",
+            url: "/students",
+            data: "data",
+            dataType: "json",
+            success: function (response) {
+              console.log(response);
+            }
+          });
         });
     });
 </script>
